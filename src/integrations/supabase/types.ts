@@ -14,13 +14,258 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      business_settings: {
+        Row: {
+          created_at: string
+          currency: string
+          deposit_type: string | null
+          deposit_value: number | null
+          id: number
+          updated_at: string
+          whatsapp_number: string | null
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          deposit_type?: string | null
+          deposit_value?: number | null
+          id?: number
+          updated_at?: string
+          whatsapp_number?: string | null
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          deposit_type?: string | null
+          deposit_value?: number | null
+          id?: number
+          updated_at?: string
+          whatsapp_number?: string | null
+        }
+        Relationships: []
+      }
+      customers: {
+        Row: {
+          country: string
+          created_at: string
+          dni: string
+          email: string
+          first_name: string
+          id: string
+          last_name: string
+          phone: string
+          updated_at: string
+          whatsapp: string
+        }
+        Insert: {
+          country: string
+          created_at?: string
+          dni: string
+          email: string
+          first_name: string
+          id?: string
+          last_name: string
+          phone: string
+          updated_at?: string
+          whatsapp: string
+        }
+        Update: {
+          country?: string
+          created_at?: string
+          dni?: string
+          email?: string
+          first_name?: string
+          id?: string
+          last_name?: string
+          phone?: string
+          updated_at?: string
+          whatsapp?: string
+        }
+        Relationships: []
+      }
+      reservation_counters: {
+        Row: {
+          last_value: number
+          year: number
+        }
+        Insert: {
+          last_value?: number
+          year: number
+        }
+        Update: {
+          last_value?: number
+          year?: number
+        }
+        Relationships: []
+      }
+      reservations: {
+        Row: {
+          created_at: string
+          customer_id: string
+          customer_notes: string | null
+          daily_price_snapshot: number | null
+          deposit_amount: number | null
+          duration_days: number
+          id: string
+          idempotency_key: string
+          pickup_address: string
+          pickup_city: string
+          pickup_datetime: string
+          pickup_location_type: string
+          pickup_reference: string | null
+          remaining_amount: number | null
+          reservation_number: string
+          return_address: string
+          return_city: string
+          return_datetime: string
+          return_location_type: string
+          return_reference: string | null
+          same_return_location: boolean
+          status: string
+          total_amount: number | null
+          updated_at: string
+          vehicle_id: string
+          vehicle_snapshot: Json
+        }
+        Insert: {
+          created_at?: string
+          customer_id: string
+          customer_notes?: string | null
+          daily_price_snapshot?: number | null
+          deposit_amount?: number | null
+          duration_days: number
+          id?: string
+          idempotency_key: string
+          pickup_address: string
+          pickup_city: string
+          pickup_datetime: string
+          pickup_location_type: string
+          pickup_reference?: string | null
+          remaining_amount?: number | null
+          reservation_number: string
+          return_address: string
+          return_city: string
+          return_datetime: string
+          return_location_type: string
+          return_reference?: string | null
+          same_return_location?: boolean
+          status?: string
+          total_amount?: number | null
+          updated_at?: string
+          vehicle_id: string
+          vehicle_snapshot: Json
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string
+          customer_notes?: string | null
+          daily_price_snapshot?: number | null
+          deposit_amount?: number | null
+          duration_days?: number
+          id?: string
+          idempotency_key?: string
+          pickup_address?: string
+          pickup_city?: string
+          pickup_datetime?: string
+          pickup_location_type?: string
+          pickup_reference?: string | null
+          remaining_amount?: number | null
+          reservation_number?: string
+          return_address?: string
+          return_city?: string
+          return_datetime?: string
+          return_location_type?: string
+          return_reference?: string | null
+          same_return_location?: boolean
+          status?: string
+          total_amount?: number | null
+          updated_at?: string
+          vehicle_id?: string
+          vehicle_snapshot?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reservations_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reservations_vehicle_id_fkey"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vehicles: {
+        Row: {
+          brand: string
+          category: string
+          created_at: string
+          daily_price: number | null
+          description: string | null
+          features: string[]
+          fuel_type: string | null
+          id: string
+          images: string[]
+          is_active: boolean
+          luggage_capacity: number | null
+          model: string
+          passenger_capacity: number
+          sort_order: number
+          transmission: string
+          updated_at: string
+          year: number
+        }
+        Insert: {
+          brand: string
+          category: string
+          created_at?: string
+          daily_price?: number | null
+          description?: string | null
+          features?: string[]
+          fuel_type?: string | null
+          id?: string
+          images?: string[]
+          is_active?: boolean
+          luggage_capacity?: number | null
+          model: string
+          passenger_capacity: number
+          sort_order?: number
+          transmission: string
+          updated_at?: string
+          year: number
+        }
+        Update: {
+          brand?: string
+          category?: string
+          created_at?: string
+          daily_price?: number | null
+          description?: string | null
+          features?: string[]
+          fuel_type?: string | null
+          id?: string
+          images?: string[]
+          is_active?: boolean
+          luggage_capacity?: number | null
+          model?: string
+          passenger_capacity?: number
+          sort_order?: number
+          transmission?: string
+          updated_at?: string
+          year?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      next_reservation_number: { Args: never; Returns: string }
     }
     Enums: {
       [_ in never]: never
