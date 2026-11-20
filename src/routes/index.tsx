@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, CalendarDays, Car, Clock, MapPin } from "lucide-react";
+import { ArrowRight, Car } from "lucide-react";
+
+import { DateSearch } from "@/components/site/date-search";
 
 import hero from "@/assets/renault-rumbo-a-los-andes.png.asset.json";
 import roca from "@/assets/roca.jpg";
@@ -21,17 +23,6 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-function Field({ label, icon: Icon, value, w }: { label: string; icon: typeof Car; value: string; w: string }) {
-  return (
-    <label className={`flex flex-col gap-1.5 ${w}`}>
-      <span className="text-sm font-medium">{label}</span>
-      <span className="flex h-11 items-center gap-2 rounded-md border border-input bg-background px-3 text-sm text-muted-foreground">
-        <Icon className="h-4 w-4" /> {value}
-      </span>
-    </label>
-  );
-}
-
 function Index() {
   return (
     <>
@@ -49,14 +40,7 @@ function Index() {
       <div className="relative mx-auto -mt-24 max-w-6xl px-6">
         <div className="rounded-xl bg-card p-7 [box-shadow:var(--shadow-card)]">
           <h2 className="flex items-center gap-3 text-2xl font-bold text-primary"><Car className="h-6 w-6" />Encontrá tu próximo vehículo</h2>
-          <div className="mt-5 flex flex-wrap items-end gap-4">
-            <Field label="Lugar de retiro" icon={MapPin} value="General Roca, Río Negro" w="flex-[2] min-w-52" />
-            <Field label="Fecha de retiro" icon={CalendarDays} value="Seleccionar fecha" w="flex-[1.4] min-w-40" />
-            <Field label="Hora" icon={Clock} value="10:00" w="flex-1 min-w-28" />
-            <Field label="Fecha de devolución" icon={CalendarDays} value="Seleccionar fecha" w="flex-[1.4] min-w-40" />
-            <Field label="Hora" icon={Clock} value="10:00" w="flex-1 min-w-28" />
-            <Link to="/vehiculos" className="flex h-11 items-center gap-2 rounded-md bg-primary px-6 font-semibold text-primary-foreground"><ArrowRight className="h-5 w-5 text-accent" />Buscar vehículos</Link>
-          </div>
+          <div className="mt-5"><DateSearch /></div>
         </div>
       </div>
 

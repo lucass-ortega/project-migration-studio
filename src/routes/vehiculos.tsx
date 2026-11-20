@@ -15,13 +15,13 @@ import {
   Users,
 } from "lucide-react";
 
-import chevroletOnix from "@/assets/chevrolet-onix-plus.webp.asset.json";
-import renaultKardian from "@/assets/renault-kardian.webp.asset.json";
-import renaultLogan from "@/assets/renault-logan.webp.asset.json";
-import renaultSandero from "@/assets/renault-sandero.webp.asset.json";
-import vwPoloTrack from "@/assets/vw-polo-track.webp.asset.json";
 import { PageHero } from "@/components/site/page-hero";
 import { ReservationCta } from "@/components/site/reservation-cta";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { DateSearch } from "@/components/site/date-search";
+import { parseBookingSearch } from "@/lib/booking-search";
+import { catalogQuery } from "@/lib/catalog-query";
+import { formatMoney } from "@/lib/reservation-logic";
 
 export const Route = createFileRoute("/vehiculos")({
   head: () => ({
@@ -42,6 +42,8 @@ export const Route = createFileRoute("/vehiculos")({
     ],
     links: [{ rel: "canonical", href: "https://del-valle-road-rentals.lovable.app/vehiculos" }],
   }),
+  validateSearch: parseBookingSearch,
+  loader: ({ context }) => context.queryClient.ensureQueryData(catalogQuery),
   component: VehiclesPage,
 });
 
@@ -72,60 +74,10 @@ const categories = [
   },
 ];
 
-const fleet = [
-  {
-    name: "Renault Kardian Evolution 1.6 MT",
-    category: "SUV Compacto",
-    detail: "SUV · 5 puertas",
-    year: 2026,
-    image: renaultKardian,
-    passengers: 5,
-    luggage: 2,
-    transmission: "Manual",
-  },
-  {
-    name: "Renault Logan Life 1.6",
-    category: "Sedán",
-    detail: "Sedán · 4 puertas",
-    year: 2024,
-    image: renaultLogan,
-    passengers: 5,
-    luggage: 3,
-    transmission: "Manual",
-  },
-  {
-    name: "Chevrolet Onix Plus 1.0T LT MT",
-    category: "Sedán",
-    detail: "Sedán · 4 puertas",
-    year: 2025,
-    image: chevroletOnix,
-    passengers: 5,
-    luggage: 2,
-    transmission: "Manual",
-  },
-  {
-    name: "Volkswagen Polo Track MSI MT G1",
-    category: "Hatchback",
-    detail: "Hatchback · 5 puertas",
-    year: 2026,
-    image: vwPoloTrack,
-    passengers: 5,
-    luggage: 2,
-    transmission: "Manual",
-  },
-  {
-    name: "Renault Sandero Life 1.6",
-    category: "Hatchback",
-    detail: "Hatchback · 5 puertas",
-    year: 2025,
-    image: renaultSandero,
-    passengers: 5,
-    luggage: 2,
-    transmission: "Manual",
-  },
-];
-
 function VehiclesPage() {
+  const search = Route.useSearch();
+  const { data } = useSuspenseQuery(catalogQuery);
+  const fleet = data.vehicles;
   return (
     <>
       <PageHero
@@ -166,7 +118,11 @@ function VehiclesPage() {
         </p>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 pb-14" aria-labelledby="fleet-title">
+      <section id="flota" className="mx-auto max-w-7xl scroll-mt-24 px-6 pb-14" aria-labelledby="fleet-title">
+        <div className="mb-8 rounded-xl border border-border bg-card p-6 shadow-sm">
+          <h2 className="text-lg font-bold text-primary">¿Cuándo lo necesitás?</h2>
+          <div className="mt-4"><DateSearch key={JSON.stringify(search)} initial={search} /></div>
+        </div>
         <div className="mb-7">
           <p className="text-sm font-semibold tracking-[0.2em] text-primary">ELEGÍ TU VEHÍCULO</p>
           <h2 id="fleet-title" className="mt-2 text-3xl font-bold text-primary">
@@ -176,14 +132,17 @@ function VehiclesPage() {
         </div>
 
         <div className="space-y-5">
-          {fleet.map(({ name, category, detail, year, image, passengers, luggage, transmission }) => (
+          {fleet.map((v) => {
+            const name = `${v.brand} ${v.model}`;
+            const { category, year, transmission } = v;
+            return (
             <article
-              key={name}
+              key={v.id}
               className="grid overflow-hidden rounded-xl border border-border bg-card shadow-sm lg:grid-cols-[250px_minmax(0,1fr)_190px]"
             >
               <div className="flex min-h-48 items-center justify-center border-b border-border bg-secondary p-3 lg:border-b-0 lg:border-r">
                 <img
-                  src={image.url}
+                  src={v.images[0]}
                   alt={`${name} disponible para consultar`}
                   width={900}
                   height={600}
@@ -197,17 +156,25 @@ function VehiclesPage() {
                   {category}
                 </span>
                 <h3 className="mt-3 text-2xl font-bold text-primary">{name}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">{detail}</p>
+                <p className="mt-1 text-sm text-muted-foreground">{v.description}</p>
 
                 <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm text-muted-foreground">
                   <span className="flex items-center gap-1.5">
                     <Users className="h-4 w-4 text-primary" />
-                    {passengers} pasajeros
+                    {v.passenger_capacity} pasajeros
                   </span>
-                  <span className="flex items-center gap-1.5">
-                    <Briefcase className="h-4 w-4 text-primary" />
-                    {luggage} valijas
-                  </span>
+                  {v.luggage_capacity != null && (
+                    <span className="flex items-center gap-1.5">
+                      <Briefcase className="h-4 w-4 text-primary" />
+                      {v.luggage_capacity} valijas
+                    </span>
+                  )}
+                  {v.fuel_type && (
+                    <span className="flex items-center gap-1.5">
+                      <Gauge className="h-4 w-4 text-primary" />
+                      {v.fuel_type}
+                    </span>
+                  )}
                   <span className="flex items-center gap-1.5">
                     <Settings2 className="h-4 w-4 text-primary" />
                     {transmission}
@@ -216,10 +183,12 @@ function VehiclesPage() {
                     <Calendar className="h-4 w-4 text-primary" />
                     Año {year}
                   </span>
-                  <span className="flex items-center gap-1.5">
-                    <Snowflake className="h-4 w-4 text-primary" />
-                    Aire acondicionado
-                  </span>
+                  {v.features.map((f) => (
+                    <span key={f} className="flex items-center gap-1.5">
+                      <Snowflake className="h-4 w-4 text-primary" />
+                      {f}
+                    </span>
+                  ))}
                 </div>
 
                 <div className="mt-5 grid gap-2 text-sm sm:grid-cols-2">
@@ -240,21 +209,24 @@ function VehiclesPage() {
               </div>
 
               <div className="flex flex-col justify-center border-t border-border p-6 lg:border-l lg:border-t-0 lg:text-right">
-                <p className="text-sm text-muted-foreground">Tarifa</p>
-                <p className="mt-1 font-display text-2xl font-bold text-primary">A consultar</p>
-                <p className="mt-1 text-xs text-muted-foreground">Según fechas y duración del alquiler</p>
+                <p className="text-sm text-muted-foreground">Precio por día</p>
+                <p className="mt-1 font-display text-2xl font-bold text-primary">{formatMoney(v.daily_price)}</p>
+                <p className="mt-1 text-xs text-muted-foreground">Sujeto a confirmación de disponibilidad</p>
                 <Link
-                  to="/contacto"
-                  aria-label={`Consultar por ${name}`}
+                  to="/reservar"
+                  search={{ ...search, vehiculo: v.id }}
+                  aria-label={`Seleccionar ${name}`}
                   className="mt-5 flex items-center justify-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
                 >
-                  Consultar
+                  Seleccionar vehículo
                   <ArrowRight className="h-4 w-4 text-accent" />
                 </Link>
               </div>
             </article>
-          ))}
+          );
+          })}
         </div>
+        <p className="mt-5 text-sm text-muted-foreground">Tu solicitud está sujeta a la confirmación de disponibilidad por parte de Del Valle Rent a Car.</p>
       </section>
 
       <section className="mx-auto max-w-7xl px-6 pb-14">
