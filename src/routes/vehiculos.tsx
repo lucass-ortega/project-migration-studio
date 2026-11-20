@@ -4,14 +4,12 @@ import {
   Briefcase,
   Calendar,
   Car,
-  CarFront,
   Check,
   Gauge,
   MapPin,
   MessageCircle,
   Settings2,
   Snowflake,
-  Truck,
   Users,
 } from "lucide-react";
 
@@ -47,33 +45,6 @@ export const Route = createFileRoute("/vehiculos")({
   component: VehiclesPage,
 });
 
-const categories = [
-  {
-    name: "Económico",
-    icon: Gauge,
-    description: "Una opción ágil y práctica para moverte por la ciudad y descubrir el Alto Valle.",
-    features: ["Ideal para ciudad", "Uso eficiente", "Equipaje liviano"],
-  },
-  {
-    name: "Sedán",
-    icon: CarFront,
-    description: "Comodidad y espacio para disfrutar tanto de los trayectos urbanos como de la ruta.",
-    features: ["Confort en ruta", "Amplio baúl", "Viajes en familia"],
-  },
-  {
-    name: "Hatchback",
-    icon: Car,
-    description: "Practicidad y fácil maniobra para el día a día y los viajes cortos.",
-    features: ["Fácil de estacionar", "Buen aprovechamiento", "Ideal para parejas"],
-  },
-  {
-    name: "SUV Compacto",
-    icon: Truck,
-    description: "Mayor altura y una posición de manejo elevada para tus escapadas patagónicas.",
-    features: ["Posición elevada", "Ideal para viajes", "Más capacidad de equipaje"],
-  },
-];
-
 function VehiclesPage() {
   const search = Route.useSearch();
   const { data } = useSuspenseQuery(catalogQuery);
@@ -85,38 +56,6 @@ function VehiclesPage() {
         title="Elegí el vehículo para tu recorrido"
         description="Opciones para cada tipo de viaje, con atención personalizada para ayudarte a encontrar la categoría que mejor se adapta a vos."
       />
-
-      <section className="mx-auto max-w-7xl px-6 py-14">
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {categories.map(({ name, icon: Icon, description, features }) => (
-            <article key={name} className="flex flex-col rounded-xl border border-border bg-card p-6 shadow-sm">
-              <div className="grid h-14 w-14 place-items-center rounded-lg bg-primary text-accent">
-                <Icon className="h-8 w-8" />
-              </div>
-              <h2 className="mt-5 text-2xl font-bold text-primary">{name}</h2>
-              <p className="mt-3 text-muted-foreground">{description}</p>
-              <ul className="mt-5 flex-1 space-y-3 text-sm">
-                {features.map((feature) => (
-                  <li key={feature} className="flex items-center gap-2">
-                    <Check className="h-4 w-4 shrink-0 text-primary" />
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-              <Link
-                to="/contacto"
-                className="mt-6 flex items-center justify-between border-t border-border pt-4 text-sm font-semibold text-primary hover:text-primary/75"
-              >
-                Consultar disponibilidad
-                <ArrowRight className="h-4 w-4 text-accent" />
-              </Link>
-            </article>
-          ))}
-        </div>
-        <p className="mt-6 text-sm text-muted-foreground">
-          Las categorías y modelos disponibles se confirman al momento de realizar tu consulta.
-        </p>
-      </section>
 
       <section id="flota" className="mx-auto max-w-7xl scroll-mt-24 px-6 pb-14" aria-labelledby="fleet-title">
         <div className="mb-8 rounded-xl border border-border bg-card p-6 shadow-sm">
