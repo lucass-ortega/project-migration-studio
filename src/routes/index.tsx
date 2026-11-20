@@ -1,23 +1,79 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowRight, CalendarDays, Car, Clock, MapPin } from "lucide-react";
 
-// The home route ships no og:image, so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+import hero from "@/assets/renault-rumbo-a-los-andes.png.asset.json";
+import roca from "@/assets/roca.jpg";
+import neuquen from "@/assets/neuquen.jpg";
+
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Del Valle Rent a Car — Tu próximo destino empieza acá" },
+      { name: "description", content: "Alquilá tu vehículo en General Roca, Alto Valle y Patagonia de forma simple y segura." },
+      { property: "og:title", content: "Del Valle Rent a Car" },
+      { property: "og:description", content: "Alquiler de autos en General Roca, Alto Valle y Patagonia." },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://del-valle-road-rentals.lovable.app/" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+    links: [{ rel: "canonical", href: "https://del-valle-road-rentals.lovable.app/" }],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
+function Field({ label, icon: Icon, value, w }: { label: string; icon: typeof Car; value: string; w: string }) {
+  return (
+    <label className={`flex flex-col gap-1.5 ${w}`}>
+      <span className="text-sm font-medium">{label}</span>
+      <span className="flex h-11 items-center gap-2 rounded-md border border-input bg-background px-3 text-sm text-muted-foreground">
+        <Icon className="h-4 w-4" /> {value}
+      </span>
+    </label>
+  );
+}
+
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <>
+      <section className="relative">
+        <img src={hero.url} alt="Renault azul rumbo a los Andes" width={1774} height={887} className="h-[480px] w-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-r from-navy/85 via-navy/40 to-transparent" />
+        <div className="absolute inset-0 mx-auto max-w-7xl px-6 pt-14 text-primary-foreground">
+          <p className="text-sm tracking-[0.25em]">GENERAL ROCA · ALTO VALLE · PATAGONIA</p>
+          <div className="mt-3 h-1 w-14 bg-accent" />
+          <h1 className="mt-5 max-w-xl text-5xl font-extrabold leading-[0.95] md:text-6xl">Tu próximo destino empieza acá</h1>
+          <p className="mt-4 max-w-sm text-xl">Alquilá tu vehículo de forma simple, segura y sin complicaciones.</p>
+        </div>
+      </section>
+
+      <div className="relative mx-auto -mt-24 max-w-6xl px-6">
+        <div className="rounded-xl bg-card p-7 [box-shadow:var(--shadow-card)]">
+          <h2 className="flex items-center gap-3 text-2xl font-bold text-primary"><Car className="h-6 w-6" />Encontrá tu próximo vehículo</h2>
+          <div className="mt-5 flex flex-wrap items-end gap-4">
+            <Field label="Lugar de retiro" icon={MapPin} value="General Roca, Río Negro" w="flex-[2] min-w-52" />
+            <Field label="Fecha de retiro" icon={CalendarDays} value="Seleccionar fecha" w="flex-[1.4] min-w-40" />
+            <Field label="Hora" icon={Clock} value="10:00" w="flex-1 min-w-28" />
+            <Field label="Fecha de devolución" icon={CalendarDays} value="Seleccionar fecha" w="flex-[1.4] min-w-40" />
+            <Field label="Hora" icon={Clock} value="10:00" w="flex-1 min-w-28" />
+            <Link to="/vehiculos" className="flex h-11 items-center gap-2 rounded-md bg-primary px-6 font-semibold text-primary-foreground"><ArrowRight className="h-5 w-5 text-accent" />Buscar vehículos</Link>
+          </div>
+        </div>
+      </div>
+
+      <section className="mx-auto max-w-7xl px-6 py-12">
+        <h2 className="text-3xl font-bold text-primary">Destinos populares</h2>
+        <div className="mt-3 h-1 w-16 bg-accent" />
+        <div className="mt-6 grid gap-5 md:grid-cols-2">
+          {[["General Roca", roca], ["Neuquén", neuquen]].map(([n, img]) => (
+            <Link key={n} to="/destinos" className="group relative h-48 overflow-hidden rounded-xl">
+              <img src={img} alt={n} loading="lazy" width={1088} height={608} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              <div className="absolute inset-0 bg-gradient-to-t from-navy/80 to-transparent" />
+              <span className="absolute bottom-4 left-5 font-display text-3xl font-bold text-primary-foreground">{n}</span>
+              <ArrowRight className="absolute bottom-5 right-5 h-7 w-7 text-accent" />
+            </Link>
+          ))}
+        </div>
+      </section>
+    </>
   );
 }

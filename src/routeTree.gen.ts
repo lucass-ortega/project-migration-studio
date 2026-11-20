@@ -10,33 +10,79 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ComoReservarRouteImport } from './routes/como-reservar'
+import { Route as ContactoRouteImport } from './routes/contacto'
+import { Route as DestinosRouteImport } from './routes/destinos'
+import { Route as VehiculosRouteImport } from './routes/vehiculos'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ComoReservarRoute = ComoReservarRouteImport.update({
+  id: '/como-reservar',
+  path: '/como-reservar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactoRoute = ContactoRouteImport.update({
+  id: '/contacto',
+  path: '/contacto',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DestinosRoute = DestinosRouteImport.update({
+  id: '/destinos',
+  path: '/destinos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VehiculosRoute = VehiculosRouteImport.update({
+  id: '/vehiculos',
+  path: '/vehiculos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/como-reservar': typeof ComoReservarRoute
+  '/contacto': typeof ContactoRoute
+  '/destinos': typeof DestinosRoute
+  '/vehiculos': typeof VehiculosRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/como-reservar': typeof ComoReservarRoute
+  '/contacto': typeof ContactoRoute
+  '/destinos': typeof DestinosRoute
+  '/vehiculos': typeof VehiculosRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/como-reservar': typeof ComoReservarRoute
+  '/contacto': typeof ContactoRoute
+  '/destinos': typeof DestinosRoute
+  '/vehiculos': typeof VehiculosRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/como-reservar' | '/contacto' | '/destinos' | '/vehiculos'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/como-reservar' | '/contacto' | '/destinos' | '/vehiculos'
+  id:
+    | '__root__'
+    | '/'
+    | '/como-reservar'
+    | '/contacto'
+    | '/destinos'
+    | '/vehiculos'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ComoReservarRoute: typeof ComoReservarRoute
+  ContactoRoute: typeof ContactoRoute
+  DestinosRoute: typeof DestinosRoute
+  VehiculosRoute: typeof VehiculosRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +94,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/como-reservar': {
+      id: '/como-reservar'
+      path: '/como-reservar'
+      fullPath: '/como-reservar'
+      preLoaderRoute: typeof ComoReservarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contacto': {
+      id: '/contacto'
+      path: '/contacto'
+      fullPath: '/contacto'
+      preLoaderRoute: typeof ContactoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/destinos': {
+      id: '/destinos'
+      path: '/destinos'
+      fullPath: '/destinos'
+      preLoaderRoute: typeof DestinosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vehiculos': {
+      id: '/vehiculos'
+      path: '/vehiculos'
+      fullPath: '/vehiculos'
+      preLoaderRoute: typeof VehiculosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ComoReservarRoute: ComoReservarRoute,
+  ContactoRoute: ContactoRoute,
+  DestinosRoute: DestinosRoute,
+  VehiculosRoute: VehiculosRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
