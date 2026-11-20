@@ -83,8 +83,8 @@ export type WhatsAppSummary = {
   reservationNumber: string;
   customer: { firstName: string; lastName: string; dni: string; phone: string; whatsapp: string; email: string; country: string };
   vehicle: { brand: string; model: string; year: number };
-  pickup: { date: string; time: string; type: string; address: string; city: string; reference?: string | null };
-  ret: { date: string; time: string; type: string; address: string; city: string; reference?: string | null };
+  pickup: { date: string; time: string; type: string; address: string; city: string; reference?: string | null | undefined };
+  ret: { date: string; time: string; type: string; address: string; city: string; reference?: string | null | undefined };
   quote: Quote;
   notes?: string | null;
 };
