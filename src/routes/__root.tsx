@@ -128,7 +128,7 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
   const path = useRouterState({ select: (s) => s.location.pathname });
-  const privateShell = path === "/auth" || path === "/reset-password" || path === "/admin" || path.startsWith("/admin/");
+  const privateShell = path === "/auth" || path === "/login" || path === "/reset-password" || path === "/admin" || path.startsWith("/admin/");
   useEffect(() => {
     const { data } = supabase.auth.onAuthStateChange((event) => {
       if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;

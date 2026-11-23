@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ComoReservarRouteImport } from './routes/como-reservar'
 import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as DestinosRouteImport } from './routes/destinos'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as ReservarRouteImport } from './routes/reservar'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as VehiculosRouteImport } from './routes/vehiculos'
@@ -52,6 +53,11 @@ const ContactoRoute = ContactoRouteImport.update({
 const DestinosRoute = DestinosRouteImport.update({
   id: '/destinos',
   path: '/destinos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReservarRoute = ReservarRouteImport.update({
@@ -110,6 +116,7 @@ export interface FileRoutesByFullPath {
   '/como-reservar': typeof ComoReservarRoute
   '/contacto': typeof ContactoRoute
   '/destinos': typeof DestinosRoute
+  '/login': typeof LoginRoute
   '/reservar': typeof ReservarRoute
   '/reset-password': typeof ResetPasswordRoute
   '/vehiculos': typeof VehiculosRoute
@@ -126,6 +133,7 @@ export interface FileRoutesByTo {
   '/como-reservar': typeof ComoReservarRoute
   '/contacto': typeof ContactoRoute
   '/destinos': typeof DestinosRoute
+  '/login': typeof LoginRoute
   '/reservar': typeof ReservarRoute
   '/reset-password': typeof ResetPasswordRoute
   '/vehiculos': typeof VehiculosRoute
@@ -143,6 +151,7 @@ export interface FileRoutesById {
   '/como-reservar': typeof ComoReservarRoute
   '/contacto': typeof ContactoRoute
   '/destinos': typeof DestinosRoute
+  '/login': typeof LoginRoute
   '/reservar': typeof ReservarRoute
   '/reset-password': typeof ResetPasswordRoute
   '/vehiculos': typeof VehiculosRoute
@@ -161,6 +170,7 @@ export interface FileRouteTypes {
     | '/como-reservar'
     | '/contacto'
     | '/destinos'
+    | '/login'
     | '/reservar'
     | '/reset-password'
     | '/vehiculos'
@@ -177,6 +187,7 @@ export interface FileRouteTypes {
     | '/como-reservar'
     | '/contacto'
     | '/destinos'
+    | '/login'
     | '/reservar'
     | '/reset-password'
     | '/vehiculos'
@@ -193,6 +204,7 @@ export interface FileRouteTypes {
     | '/como-reservar'
     | '/contacto'
     | '/destinos'
+    | '/login'
     | '/reservar'
     | '/reset-password'
     | '/vehiculos'
@@ -211,6 +223,7 @@ export interface RootRouteChildren {
   ComoReservarRoute: typeof ComoReservarRoute
   ContactoRoute: typeof ContactoRoute
   DestinosRoute: typeof DestinosRoute
+  LoginRoute: typeof LoginRoute
   ReservarRoute: typeof ReservarRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   VehiculosRoute: typeof VehiculosRoute
@@ -258,6 +271,13 @@ declare module '@tanstack/react-router' {
       path: '/destinos'
       fullPath: '/destinos'
       preLoaderRoute: typeof DestinosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reservar': {
@@ -363,6 +383,7 @@ const rootRouteChildren: RootRouteChildren = {
   ComoReservarRoute: ComoReservarRoute,
   ContactoRoute: ContactoRoute,
   DestinosRoute: DestinosRoute,
+  LoginRoute: LoginRoute,
   ReservarRoute: ReservarRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   VehiculosRoute: VehiculosRoute,

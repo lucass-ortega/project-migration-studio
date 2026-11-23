@@ -45,6 +45,9 @@ export function SiteFooter() {
             </Link>
           ))}
         </nav>
+        <Link to="/login" className="text-xs text-primary-foreground/60 hover:text-accent">
+          Acceso administrativo
+        </Link>
         <div className="flex gap-3" aria-label="Redes sociales">
           <Instagram aria-hidden="true" />
           <Facebook aria-hidden="true" />
