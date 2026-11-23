@@ -1,0 +1,2 @@
+import { supabaseAdmin } from '@/integrations/supabase/client.server';
+export async function resolveVehicleImages(images:string[]){return Promise.all(images.map(async image=>{if(!image.startsWith('storage:vehicle-images/'))return image;const path=image.slice('storage:vehicle-images/'.length);const r=await supabaseAdmin.storage.from('vehicle-images').createSignedUrl(path,3600);return r.data?.signedUrl??'';}));}

@@ -20,7 +20,10 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as VehiculosRouteImport } from './routes/vehiculos'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
+import { Route as AuthenticatedAdminCalendarioRouteImport } from './routes/_authenticated/admin/calendario'
+import { Route as AuthenticatedAdminConfiguracionRouteImport } from './routes/_authenticated/admin/configuracion'
 import { Route as AuthenticatedAdminReservasRouteImport } from './routes/_authenticated/admin/reservas'
+import { Route as AuthenticatedAdminVehiculosRouteImport } from './routes/_authenticated/admin/vehiculos'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -76,10 +79,28 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
+const AuthenticatedAdminCalendarioRoute =
+  AuthenticatedAdminCalendarioRouteImport.update({
+    id: '/calendario',
+    path: '/calendario',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminConfiguracionRoute =
+  AuthenticatedAdminConfiguracionRouteImport.update({
+    id: '/configuracion',
+    path: '/configuracion',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminReservasRoute =
   AuthenticatedAdminReservasRouteImport.update({
     id: '/reservas',
     path: '/reservas',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminVehiculosRoute =
+  AuthenticatedAdminVehiculosRouteImport.update({
+    id: '/vehiculos',
+    path: '/vehiculos',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
 
@@ -93,7 +114,10 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/vehiculos': typeof VehiculosRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/admin/calendario': typeof AuthenticatedAdminCalendarioRoute
+  '/admin/configuracion': typeof AuthenticatedAdminConfiguracionRoute
   '/admin/reservas': typeof AuthenticatedAdminReservasRoute
+  '/admin/vehiculos': typeof AuthenticatedAdminVehiculosRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesByTo {
@@ -105,7 +129,10 @@ export interface FileRoutesByTo {
   '/reservar': typeof ReservarRoute
   '/reset-password': typeof ResetPasswordRoute
   '/vehiculos': typeof VehiculosRoute
+  '/admin/calendario': typeof AuthenticatedAdminCalendarioRoute
+  '/admin/configuracion': typeof AuthenticatedAdminConfiguracionRoute
   '/admin/reservas': typeof AuthenticatedAdminReservasRoute
+  '/admin/vehiculos': typeof AuthenticatedAdminVehiculosRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesById {
@@ -120,7 +147,10 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/vehiculos': typeof VehiculosRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/_authenticated/admin/calendario': typeof AuthenticatedAdminCalendarioRoute
+  '/_authenticated/admin/configuracion': typeof AuthenticatedAdminConfiguracionRoute
   '/_authenticated/admin/reservas': typeof AuthenticatedAdminReservasRoute
+  '/_authenticated/admin/vehiculos': typeof AuthenticatedAdminVehiculosRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRouteTypes {
@@ -135,7 +165,10 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/vehiculos'
     | '/admin'
+    | '/admin/calendario'
+    | '/admin/configuracion'
     | '/admin/reservas'
+    | '/admin/vehiculos'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -147,7 +180,10 @@ export interface FileRouteTypes {
     | '/reservar'
     | '/reset-password'
     | '/vehiculos'
+    | '/admin/calendario'
+    | '/admin/configuracion'
     | '/admin/reservas'
+    | '/admin/vehiculos'
     | '/admin'
   id:
     | '__root__'
@@ -161,7 +197,10 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/vehiculos'
     | '/_authenticated/admin'
+    | '/_authenticated/admin/calendario'
+    | '/_authenticated/admin/configuracion'
     | '/_authenticated/admin/reservas'
+    | '/_authenticated/admin/vehiculos'
     | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
 }
@@ -256,6 +295,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/calendario': {
+      id: '/_authenticated/admin/calendario'
+      path: '/calendario'
+      fullPath: '/admin/calendario'
+      preLoaderRoute: typeof AuthenticatedAdminCalendarioRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/configuracion': {
+      id: '/_authenticated/admin/configuracion'
+      path: '/configuracion'
+      fullPath: '/admin/configuracion'
+      preLoaderRoute: typeof AuthenticatedAdminConfiguracionRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/reservas': {
       id: '/_authenticated/admin/reservas'
       path: '/reservas'
@@ -263,16 +316,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminReservasRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/vehiculos': {
+      id: '/_authenticated/admin/vehiculos'
+      path: '/vehiculos'
+      fullPath: '/admin/vehiculos'
+      preLoaderRoute: typeof AuthenticatedAdminVehiculosRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
   }
 }
 
 interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminCalendarioRoute: typeof AuthenticatedAdminCalendarioRoute
+  AuthenticatedAdminConfiguracionRoute: typeof AuthenticatedAdminConfiguracionRoute
   AuthenticatedAdminReservasRoute: typeof AuthenticatedAdminReservasRoute
+  AuthenticatedAdminVehiculosRoute: typeof AuthenticatedAdminVehiculosRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
 }
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminCalendarioRoute: AuthenticatedAdminCalendarioRoute,
+  AuthenticatedAdminConfiguracionRoute: AuthenticatedAdminConfiguracionRoute,
   AuthenticatedAdminReservasRoute: AuthenticatedAdminReservasRoute,
+  AuthenticatedAdminVehiculosRoute: AuthenticatedAdminVehiculosRoute,
   AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
 }
 

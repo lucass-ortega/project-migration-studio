@@ -58,7 +58,8 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async () => 
   ]);
   if (v.error) throw new Error(`No se pudieron cargar los vehículos: ${v.error.message}`);
   if (s.error) throw new Error(`No se pudo cargar la configuración: ${s.error.message}`);
-  const vehicles: PublicVehicle[] = (v.data ?? []).map((r) => ({ ...r, daily_price: r.daily_price == null ? null : Number(r.daily_price) }));
+  const { resolveVehicleImages } = await import("./vehicle-images.server");
+  const vehicles: PublicVehicle[] = await Promise.all((v.data ?? []).map(async (r) => ({ ...r, images: await resolveVehicleImages(r.images), daily_price: r.daily_price == null ? null : Number(r.daily_price) })));
   const settings: PublicSettings = {
     whatsapp_number: s.data?.whatsapp_number ?? null,
     deposit_type: s.data?.deposit_type ?? null,
@@ -159,6 +160,10 @@ export const createReservation = createServerFn({ method: "POST" })
     const existing = await sb.from("reservations").select("reservation_number,status").eq("idempotency_key", data.idempotencyKey).maybeSingle();
     if (existing.error) throw new Error(existing.error.message);
     if (existing.data) return build(existing.data.reservation_number, existing.data.status);
+
+    const occupied = await sb.rpc("public_occupied_periods", { _start: pickupAt.toISOString(), _end: returnAt.toISOString() });
+    if (occupied.error) throw new Error("No se pudo comprobar la disponibilidad.");
+    if (occupied.data.some((period) => period.vehicle_id === vehicle.id)) throw new Error("El vehículo está ocupado durante las fechas seleccionadas. Elegí otro período o vehículo.");
 
     // Associate with an existing customer with the same DNI + email, otherwise create one.
     const c = data.customer;

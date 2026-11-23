@@ -16,10 +16,15 @@ import {
 import { PageHero } from "@/components/site/page-hero";
 import { ReservationCta } from "@/components/site/reservation-cta";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { DateSearch } from "@/components/site/date-search";
 import { parseBookingSearch } from "@/lib/booking-search";
 import { catalogQuery } from "@/lib/catalog-query";
 import { formatMoney } from "@/lib/reservation-logic";
+import { toBusinessDate, validateDates } from "@/lib/reservation-logic";
+import { getOccupiedPeriods } from "@/lib/availability.functions";
+import { fromSearch } from "@/components/site/date-search";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/vehiculos")({
   head: () => ({
@@ -49,6 +54,9 @@ function VehiclesPage() {
   const search = Route.useSearch();
   const { data } = useSuspenseQuery(catalogQuery);
   const fleet = data.vehicles;
+  const dates = fromSearch(search);
+  const datesValid = validateDates(dates) === null;
+  const availability = useQuery({ queryKey: ["availability", dates], enabled: datesValid, queryFn: () => getOccupiedPeriods({ data: { start: toBusinessDate(dates.pickupDate, dates.pickupTime).toISOString(), end: toBusinessDate(dates.returnDate, dates.returnTime).toISOString() } }), staleTime: 15_000 });
   return (
     <>
       <PageHero
@@ -74,6 +82,7 @@ function VehiclesPage() {
           {fleet.map((v) => {
             const name = `${v.brand} ${v.model}`;
             const { category, year, transmission } = v;
+            const occupied = availability.data?.some((period) => period.vehicle_id === v.id) ?? false;
             return (
             <article
               key={v.id}
@@ -150,8 +159,8 @@ function VehiclesPage() {
               <div className="flex flex-col justify-center border-t border-border p-6 lg:border-l lg:border-t-0 lg:text-right">
                 <p className="text-sm text-muted-foreground">Precio por día</p>
                 <p className="mt-1 font-display text-2xl font-bold text-primary">{formatMoney(v.daily_price)}</p>
-                <p className="mt-1 text-xs text-muted-foreground">Sujeto a confirmación de disponibilidad</p>
-                <Link
+                <p className="mt-1 text-xs text-muted-foreground">{occupied ? "Ocupado en las fechas seleccionadas" : availability.isError ? "No se pudo comprobar disponibilidad" : datesValid && availability.isPending ? "Comprobando disponibilidad…" : "Sujeto a confirmación de disponibilidad"}</p>
+                {occupied || (datesValid && (availability.isPending || availability.isError)) ? <Button disabled className="mt-5 h-auto whitespace-normal py-2.5">{occupied ? "Elegí otras fechas" : "Disponibilidad pendiente"}</Button> : <Link
                   to="/reservar"
                   search={{ ...search, vehiculo: v.id }}
                   aria-label={`Seleccionar ${name}`}
@@ -159,7 +168,7 @@ function VehiclesPage() {
                 >
                   Seleccionar vehículo
                   <ArrowRight className="h-4 w-4 text-accent" />
-                </Link>
+                </Link>}
               </div>
             </article>
           );

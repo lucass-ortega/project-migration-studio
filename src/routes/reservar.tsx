@@ -20,6 +20,8 @@ import {
   type LocationType,
 } from "@/lib/reservation-logic";
 import { createReservation, type PublicVehicle, type ReservationResult } from "@/lib/reservations.functions";
+import { getOccupiedPeriods } from "@/lib/availability.functions";
+import { useQuery } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/reservar")({
   head: () => ({
@@ -72,6 +74,8 @@ function ReservePage() {
     return computeQuote(vehicle.daily_price, days, data.settings);
   }, [vehicle, dates, data.settings]);
   const retLoc = same ? pickup : ret;
+  const availability = useQuery({ queryKey: ["availability", dates], enabled: validateDates(dates) === null, queryFn: () => getOccupiedPeriods({ data: { start: toBusinessDate(dates.pickupDate, dates.pickupTime).toISOString(), end: toBusinessDate(dates.returnDate, dates.returnTime).toISOString() } }), staleTime: 15_000 });
+  const isOccupied = (id: string) => availability.data?.some((p) => p.vehicle_id === id) ?? false;
 
   const go = (n: number) => { setError(null); setStep(n); window.scrollTo({ top: 0, behavior: "smooth" }); };
 
@@ -81,6 +85,8 @@ function ReservePage() {
       if (e) return setError(DATES_ERROR_TEXT[e]);
     }
     if (step === 1 && !vehicle) return setError("Seleccioná un vehículo para continuar.");
+    if (step > 0 && (availability.isPending || availability.isError)) return setError("Esperá a que se compruebe la disponibilidad o intentá nuevamente.");
+    if (step > 0 && vehicle && isOccupied(vehicle.id)) return setError("El vehículo está ocupado durante esas fechas. Elegí otro vehículo o cambiá las fechas.");
     if (step === 2) {
       const bad = (l: Loc) => !l.type || !l.address.trim() || !l.city.trim();
       if (bad(pickup) || (!same && bad(ret))) return setError("Completá tipo de ubicación, dirección y ciudad.");
@@ -100,6 +106,9 @@ function ReservePage() {
     setSending(true);
     setError(null);
     try {
+      const latest = await availability.refetch();
+      if (latest.isError || !latest.data) return setError("No se pudo comprobar la disponibilidad. Intentá nuevamente.");
+      if (latest.data.some((p) => p.vehicle_id === vehicle.id)) return setError("El vehículo está ocupado durante esas fechas. Elegí otro vehículo o cambiá las fechas.");
       const r = await submit({
         data: {
           idempotencyKey: idemKey,
@@ -152,7 +161,7 @@ function ReservePage() {
             <Panel title="Elegí tu vehículo">
               <div className="grid gap-4 sm:grid-cols-2">
                 {data.vehicles.map((v) => (
-                  <VehicleOption key={v.id} v={v} selected={v.id === vehicleId} onSelect={() => setVehicleId(v.id)} />
+                  <VehicleOption key={v.id} v={v} selected={v.id === vehicleId} disabled={isOccupied(v.id)} onSelect={() => setVehicleId(v.id)} />
                 ))}
               </div>
               <Notice>Tu solicitud está sujeta a la confirmación de disponibilidad por parte de Del Valle Rent a Car.</Notice>
@@ -255,6 +264,7 @@ function ReservePage() {
           )}
 
           {error && <p role="alert" className="mt-5 text-sm font-medium text-destructive">{error}</p>}
+          {vehicle && step > 0 && step < 5 && isOccupied(vehicle.id) && <p role="alert" className="mt-5 text-sm font-medium text-destructive">Este vehículo está ocupado durante las fechas elegidas. Volvé a Fechas o Vehículo para cambiar la selección.</p>}
 
           {step < 5 && (
             <div className="mt-8 flex items-center justify-between gap-3 border-t border-border pt-6">
@@ -316,14 +326,15 @@ function QuoteBox({ quote }: { quote: NonNullable<ReturnType<typeof computeQuote
     </div>
   );
 }
-function VehicleOption({ v, selected, onSelect }: { v: PublicVehicle; selected: boolean; onSelect: () => void }) {
+function VehicleOption({ v, selected, disabled, onSelect }: { v: PublicVehicle; selected: boolean; disabled: boolean; onSelect: () => void }) {
   return (
-    <button type="button" onClick={onSelect} aria-pressed={selected} className={`flex items-center gap-4 rounded-lg border-2 p-4 text-left transition-colors ${selected ? "border-primary bg-secondary" : "border-border hover:border-primary/50"}`}>
+    <button type="button" onClick={onSelect} disabled={disabled} aria-pressed={selected} className={`flex items-center gap-4 rounded-lg border-2 p-4 text-left transition-colors disabled:opacity-50 ${selected ? "border-primary bg-secondary" : "border-border hover:border-primary/50"}`}>
       <img src={v.images[0]} alt={`${v.brand} ${v.model}`} className="h-16 w-24 shrink-0 object-contain" />
       <div className="min-w-0 flex-1">
         <p className="font-semibold text-primary">{v.brand} {v.model}</p>
         <p className="text-xs text-muted-foreground">{v.category} · {v.transmission} · {v.passenger_capacity} pasajeros · Año {v.year}</p>
         <p className="mt-1 text-sm font-semibold">{formatMoney(v.daily_price)} / día</p>
+        {disabled && <p className="text-xs text-destructive">Ocupado en estas fechas</p>}
       </div>
       {selected && <Check className="h-5 w-5 shrink-0 text-primary" />}
     </button>
