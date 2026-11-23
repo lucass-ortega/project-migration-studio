@@ -7,3 +7,5 @@
 - [ ] Integrar disponibilidad pública sin cambiar WhatsApp ni precios.
 - [ ] Ejecutar pruebas de reglas, permisos y conflictos y revisar pantallas.
 - [ ] Documentar acceso de propietarios y límites de verificación.
+- [ ] Autorizar el correo del primer propietario y enviar su invitación segura.
+- [ ] Autorizar al segundo propietario cuando indique su correo.
