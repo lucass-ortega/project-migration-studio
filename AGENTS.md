@@ -33,3 +33,4 @@ use the editor.
 - Administrator roles live in a protected separate table; every administrative server function checks the authenticated role through RLS before accessing private data.
 - Availability writes use database triggers with per-vehicle row locks and half-open periods, so reservations and manual blocks share atomic conflict enforcement including direct API writes.
 - Vehicle image uploads use a private Storage bucket and short-lived signed display URLs, because workspace policy disallows public buckets.
+- Public availability requests use a bounded server function returning only vehicle IDs and occupied periods; the privileged RPC stays inaccessible to browser roles to avoid exposing private reservation details.
