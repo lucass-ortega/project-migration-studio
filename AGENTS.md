@@ -28,3 +28,8 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+- Administrative routes live under the authenticated admin layout, while the root preserves public chrome on public URLs only, to isolate the private workspace without changing the public site.
+- Administrator roles live in a protected separate table; every administrative server function checks the authenticated role through RLS before accessing private data.
+- Availability writes use database triggers with per-vehicle row locks and half-open periods, so reservations and manual blocks share atomic conflict enforcement including direct API writes.
+- Vehicle image uploads use a private Storage bucket and short-lived signed display URLs, because workspace policy disallows public buckets.

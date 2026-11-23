@@ -63,6 +63,7 @@
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
   --color-navy: var(--navy);
+  --color-success: var(--success);
   --font-display: "Outfit", sans-serif;
   --font-sans: "Figtree", sans-serif;
   --color-sidebar: var(--sidebar);
@@ -77,6 +78,7 @@
 
 @layer base{h1,h2,h3{font-family:var(--font-display)}}
 :root {
+  --success: oklch(0.47 0.12 158);
   --navy: oklch(0.27 0.1 262);
   --shadow-card: 0 20px 50px -20px oklch(0.27 0.1 262 / 0.35);
   --radius: 0.625rem;
@@ -115,6 +117,7 @@
 }
 
 .dark {
+  --success: oklch(0.76 0.14 158);
   --background: oklch(0.129 0.042 264.695);
   --foreground: oklch(0.984 0.003 247.858);
   --card: oklch(0.208 0.042 265.755);

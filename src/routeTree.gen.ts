@@ -10,15 +10,30 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ComoReservarRouteImport } from './routes/como-reservar'
 import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as DestinosRouteImport } from './routes/destinos'
 import { Route as ReservarRouteImport } from './routes/reservar'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as VehiculosRouteImport } from './routes/vehiculos'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
+import { Route as AuthenticatedAdminReservasRouteImport } from './routes/_authenticated/admin/reservas'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ComoReservarRoute = ComoReservarRouteImport.update({
@@ -41,70 +56,124 @@ const ReservarRoute = ReservarRouteImport.update({
   path: '/reservar',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VehiculosRoute = VehiculosRouteImport.update({
   id: '/vehiculos',
   path: '/vehiculos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminReservasRoute =
+  AuthenticatedAdminReservasRouteImport.update({
+    id: '/reservas',
+    path: '/reservas',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/como-reservar': typeof ComoReservarRoute
   '/contacto': typeof ContactoRoute
   '/destinos': typeof DestinosRoute
   '/reservar': typeof ReservarRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/vehiculos': typeof VehiculosRoute
+  '/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/admin/reservas': typeof AuthenticatedAdminReservasRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/como-reservar': typeof ComoReservarRoute
   '/contacto': typeof ContactoRoute
   '/destinos': typeof DestinosRoute
   '/reservar': typeof ReservarRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/vehiculos': typeof VehiculosRoute
+  '/admin/reservas': typeof AuthenticatedAdminReservasRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
   '/como-reservar': typeof ComoReservarRoute
   '/contacto': typeof ContactoRoute
   '/destinos': typeof DestinosRoute
   '/reservar': typeof ReservarRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/vehiculos': typeof VehiculosRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/_authenticated/admin/reservas': typeof AuthenticatedAdminReservasRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/como-reservar'
     | '/contacto'
     | '/destinos'
     | '/reservar'
+    | '/reset-password'
     | '/vehiculos'
+    | '/admin'
+    | '/admin/reservas'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
     | '/como-reservar'
     | '/contacto'
     | '/destinos'
     | '/reservar'
+    | '/reset-password'
     | '/vehiculos'
+    | '/admin/reservas'
+    | '/admin'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
+    | '/auth'
     | '/como-reservar'
     | '/contacto'
     | '/destinos'
     | '/reservar'
+    | '/reset-password'
     | '/vehiculos'
+    | '/_authenticated/admin'
+    | '/_authenticated/admin/reservas'
+    | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
   ComoReservarRoute: typeof ComoReservarRoute
   ContactoRoute: typeof ContactoRoute
   DestinosRoute: typeof DestinosRoute
   ReservarRoute: typeof ReservarRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   VehiculosRoute: typeof VehiculosRoute
 }
 
@@ -115,6 +184,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/como-reservar': {
@@ -145,6 +228,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReservarRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/vehiculos': {
       id: '/vehiculos'
       path: '/vehiculos'
@@ -152,15 +242,63 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VehiculosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/reservas': {
+      id: '/_authenticated/admin/reservas'
+      path: '/reservas'
+      fullPath: '/admin/reservas'
+      preLoaderRoute: typeof AuthenticatedAdminReservasRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
   }
 }
 
+interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminReservasRoute: typeof AuthenticatedAdminReservasRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+}
+
+const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminReservasRoute: AuthenticatedAdminReservasRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+}
+
+const AuthenticatedAdminRouteWithChildren =
+  AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
   ComoReservarRoute: ComoReservarRoute,
   ContactoRoute: ContactoRoute,
   DestinosRoute: DestinosRoute,
   ReservarRoute: ReservarRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   VehiculosRoute: VehiculosRoute,
 }
 export const routeTree = rootRouteImport
