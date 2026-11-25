@@ -360,7 +360,27 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      public_business_settings: {
+        Row: {
+          currency: string | null
+          deposit_type: string | null
+          deposit_value: number | null
+          whatsapp_number: string | null
+        }
+        Insert: {
+          currency?: string | null
+          deposit_type?: string | null
+          deposit_value?: number | null
+          whatsapp_number?: string | null
+        }
+        Update: {
+          currency?: string | null
+          deposit_type?: string | null
+          deposit_value?: number | null
+          whatsapp_number?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       has_role: {

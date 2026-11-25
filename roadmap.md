@@ -10,4 +10,4 @@
 - [x] Autorizar el correo del primer propietario y enviar su invitación segura.
 - [ ] Autorizar al segundo propietario: falta su correo.
 - [ ] Verificar acciones privadas de punta a punta y concurrencia entre propietarios: conexión externa sin sesión de prueba disponible.
-- [ ] Verificar entrega del correo y redirecciones de Supabase: falta confirmación del enlace recibido y acceso a configuración alojada.
+- [ ] Verificar entrega del correo y redirecciones de Supabase: falta confirmación del enlace recibido y acceso a configuración alojada.- [x] Proteger configuración del negocio (vista pública con 4 campos)

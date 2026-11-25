@@ -54,7 +54,7 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async () => 
       .select("id,brand,model,year,category,transmission,fuel_type,passenger_capacity,luggage_capacity,description,features,images,daily_price")
       .eq("is_active", true)
       .order("sort_order"),
-    sb.from("business_settings").select("whatsapp_number,deposit_type,deposit_value").eq("id", 1).maybeSingle(),
+    sb.from("public_business_settings").select("whatsapp_number,deposit_type,deposit_value").maybeSingle(),
   ]);
   if (v.error) throw new Error(`No se pudieron cargar los vehículos: ${v.error.message}`);
   if (s.error) throw new Error(`No se pudo cargar la configuración: ${s.error.message}`);
