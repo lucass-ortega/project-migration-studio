@@ -29,17 +29,17 @@ export const Route = createFileRoute("/contacto")({
 const contactMethods = [
   {
     title: "Llamanos",
-    value: "+54 298 456-7890",
+    value: "+54 9 2985 08-5908",
     description: "Consultanos por teléfono sobre tu próximo viaje.",
-    href: "tel:+542984567890",
+    href: "tel:+5492985085908",
     icon: Phone,
     external: false,
   },
   {
     title: "Escribinos por WhatsApp",
-    value: "+54 9 298 456-7890",
+    value: "+54 9 2985 08-5908",
     description: "Contanos tus fechas y destino por mensaje.",
-    href: "https://wa.me/5492984567890",
+    href: "https://wa.me/5492985085908",
     icon: MessageCircle,
     external: true,
   },

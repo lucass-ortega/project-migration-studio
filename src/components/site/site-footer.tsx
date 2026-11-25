@@ -20,18 +20,18 @@ export function SiteFooter() {
           </div>
         </div>
         <div className="space-y-1">
-          <a href="tel:+542984567890" className="flex gap-2 hover:text-accent">
+          <a href="tel:+5492985085908" className="flex gap-2 hover:text-accent">
             <Phone className="h-4 w-4 shrink-0" />
-            +54 298 456-7890
+            +54 9 2985 08-5908
           </a>
           <a
-            href="https://wa.me/5492984567890"
+            href="https://wa.me/5492985085908"
             target="_blank"
             rel="noreferrer"
             className="flex gap-2 hover:text-accent"
           >
             <MessageCircle className="h-4 w-4 shrink-0" />
-            +54 9 298 456-7890
+            +54 9 2985 08-5908
           </a>
         </div>
         <a href="mailto:reservas@delvallerentacar.com.ar" className="flex gap-2 hover:text-accent">
