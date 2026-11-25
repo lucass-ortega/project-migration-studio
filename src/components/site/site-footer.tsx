@@ -49,7 +49,15 @@ export function SiteFooter() {
           Acceso administrativo
         </Link>
         <div className="flex gap-3" aria-label="Redes sociales">
-          <Instagram aria-hidden="true" />
+          <a
+            href="https://www.instagram.com/delvallerentacar23/?hl=es"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Instagram de Del Valle Rent a Car"
+            className="hover:text-accent"
+          >
+            <Instagram aria-hidden="true" />
+          </a>
           <Facebook aria-hidden="true" />
         </div>
       </div>
