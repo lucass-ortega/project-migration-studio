@@ -34,9 +34,9 @@ export function SiteFooter() {
             +54 9 2985 08-5908
           </a>
         </div>
-        <a href="mailto:reservas@delvallerentacar.com.ar" className="flex gap-2 hover:text-accent">
+        <a href="mailto:delvallerentacar23@gmail.com" className="flex gap-2 hover:text-accent">
           <Mail className="h-4 w-4 shrink-0" />
-          reservas@delvallerentacar.com.ar
+          delvallerentacar23@gmail.com
         </a>
         <nav className="flex flex-wrap gap-5" aria-label="Navegación del pie de página">
           {NAV_ITEMS.map((item) => (

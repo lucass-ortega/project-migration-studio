@@ -45,9 +45,9 @@ const contactMethods = [
   },
   {
     title: "Enviános un email",
-    value: "reservas@delvallerentacar.com.ar",
+    value: "delvallerentacar23@gmail.com",
     description: "Dejanos los detalles de tu consulta por escrito.",
-    href: "mailto:reservas@delvallerentacar.com.ar",
+    href: "mailto:delvallerentacar23@gmail.com",
     icon: Mail,
     external: false,
   },
