@@ -1,0 +1,2 @@
+REVOKE ALL ON FUNCTION public.public_occupied_periods(timestamptz,timestamptz) FROM PUBLIC,anon,authenticated;
+GRANT EXECUTE ON FUNCTION public.public_occupied_periods(timestamptz,timestamptz) TO service_role;

@@ -34,3 +34,5 @@ use the editor.
 - Availability writes use database triggers with per-vehicle row locks and half-open periods, so reservations and manual blocks share atomic conflict enforcement including direct API writes.
 - Vehicle image uploads use a private Storage bucket and short-lived signed display URLs, because workspace policy disallows public buckets.
 - Public availability requests use a bounded server function returning only vehicle IDs and occupied periods; the privileged RPC stays inaccessible to browser roles to avoid exposing private reservation details.
+- Reservation submission uses a service-only transactional RPC with an idempotency lock and immutable customer/price snapshots, so retries cannot rewrite customer history or duplicate requests.
+- Public catalog reads use a sessionless publishable client; privileged image signing accepts only vehicle-scoped stored paths to avoid exposing unrelated files.

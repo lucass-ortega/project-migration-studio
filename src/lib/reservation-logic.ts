@@ -15,7 +15,11 @@ export const TIME_OPTIONS: string[] = Array.from({ length: 31 }, (_, i) => {
 });
 
 export function toBusinessDate(date: string, time: string): Date {
-  return new Date(`${date}T${time}:00${BUSINESS_TZ_OFFSET}`);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !/^([01]\d|2[0-3]):[0-5]\d$/.test(time)) return new Date(NaN);
+  const value = new Date(`${date}T${time}:00${BUSINESS_TZ_OFFSET}`);
+  if (!Number.isFinite(value.getTime())) return new Date(NaN);
+  const local = new Date(value.getTime() - 3 * 3600000).toISOString().slice(0, 10);
+  return local === date ? value : new Date(NaN);
 }
 
 /** Days billed: every started 24h block counts as one day, minimum 1. */
@@ -25,7 +29,7 @@ export function rentalDays(pickup: Date, ret: Date): number {
   return Math.max(1, Math.ceil(ms / 86_400_000));
 }
 
-export type DatesError = "missing" | "past" | "order" | null;
+export type DatesError = "missing" | "past" | "order" | "range" | null;
 export function validateDates(
   d: { pickupDate?: string; pickupTime?: string; returnDate?: string; returnTime?: string },
   now: Date = new Date(),
@@ -36,6 +40,7 @@ export function validateDates(
   if (Number.isNaN(p.getTime()) || Number.isNaN(r.getTime())) return "missing";
   if (p.getTime() < now.getTime()) return "past";
   if (r.getTime() <= p.getTime()) return "order";
+  if (r.getTime() - p.getTime() > 730 * 86400000) return "range";
   return null;
 }
 
@@ -43,6 +48,7 @@ export const DATES_ERROR_TEXT: Record<Exclude<DatesError, null>, string> = {
   missing: "Completá las fechas y horarios de entrega y devolución.",
   past: "La fecha de entrega no puede ser anterior a hoy.",
   order: "La devolución debe ser posterior a la entrega.",
+  range: "Elegí un período válido de hasta dos años.",
 };
 
 export type DepositSettings = { deposit_type: string | null; deposit_value: number | null };
