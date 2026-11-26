@@ -147,6 +147,7 @@ export type Database = {
           pickup_location_type: string
           pickup_reference: string | null
           remaining_amount: number | null
+          request_fingerprint: string | null
           reservation_number: string
           return_address: string
           return_city: string
@@ -175,6 +176,7 @@ export type Database = {
           pickup_location_type: string
           pickup_reference?: string | null
           remaining_amount?: number | null
+          request_fingerprint?: string | null
           reservation_number: string
           return_address: string
           return_city: string
@@ -203,6 +205,7 @@ export type Database = {
           pickup_location_type?: string
           pickup_reference?: string | null
           remaining_amount?: number | null
+          request_fingerprint?: string | null
           reservation_number?: string
           return_address?: string
           return_city?: string
@@ -399,6 +402,7 @@ export type Database = {
           vehicle_id: string
         }[]
       }
+      submit_reservation_request: { Args: { _request: Json }; Returns: Json }
     }
     Enums: {
       app_role: "admin"
