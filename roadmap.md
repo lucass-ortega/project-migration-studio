@@ -1,5 +1,11 @@
 # Panel privado
 
+## Auditoría final de seguridad
+- [ ] Auditar credenciales, permisos SQL/RLS, funciones, reservas, almacenamiento y acceso privado.
+- [ ] Aplicar correcciones mínimas y conservar datos, diseño y reglas comerciales.
+- [ ] Ejecutar pruebas públicas, privadas e integridad; documentar límites y pendientes externos.
+- [ ] Entregar informe técnico y guardar cambios.
+
 - [x] Inspeccionar sitio, reservas y Supabase existente.
 - [x] Crear permisos, bloqueos, registro de acciones y control transaccional de conflictos.
 - [x] Implementar acceso privado, recuperación e invitaciones sin perfiles adicionales.
