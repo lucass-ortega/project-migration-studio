@@ -5,6 +5,8 @@
 - [x] Aplicar correcciones mínimas y conservar datos, diseño y reglas comerciales.
 - [x] Ejecutar pruebas públicas, privadas e integridad; documentar límites y pendientes externos.
 - [x] Entregar informe técnico y guardar cambios.
+- [x] Concurrencia real con dos conexiones e idempotencia simultánea verificadas.
+- [ ] Desactivar registro público en Supabase: está activo, requiere el panel.
 - [ ] Activar protección de contraseñas filtradas: requiere el panel de Supabase.
 - [ ] Verificar en navegador acciones con sesión administrativa real: el entorno no puede generar esa sesión.
 
