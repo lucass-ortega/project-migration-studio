@@ -16,7 +16,7 @@ BEGIN
  IF has_table_privilege('authenticated','public.user_roles','INSERT') THEN RAISE EXCEPTION 'Role escalation privilege'; END IF;
  IF has_function_privilege('anon','public.submit_reservation_request(jsonb)','EXECUTE') OR has_function_privilege('authenticated','public.submit_reservation_request(jsonb)','EXECUTE') THEN RAISE EXCEPTION 'Submission RPC exposed'; END IF;
  IF has_function_privilege('anon','public.public_occupied_periods(timestamptz,timestamptz)','EXECUTE') THEN RAISE EXCEPTION 'Privileged availability RPC exposed'; END IF;
- IF (SELECT array_agg(column_name::text ORDER BY ordinal_position) FROM information_schema.columns WHERE table_schema='public' AND table_name='public_business_settings')<>ARRAY['whatsapp_number','deposit_type','deposit_value','currency'] THEN RAISE EXCEPTION 'Public settings fields differ'; END IF;
+ IF (SELECT array_agg(cols.column_name::text ORDER BY cols.ordinal_position) FROM information_schema.columns cols WHERE cols.table_schema='public' AND cols.table_name='public_business_settings')<>ARRAY['whatsapp_number','deposit_type','deposit_value','currency'] THEN RAISE EXCEPTION 'Public settings fields differ'; END IF;
  BEGIN
   PERFORM set_config('request.jwt.claims',jsonb_build_object('role','service_role','sub',admin_id)::text,true);
   INSERT INTO public.vehicles(brand,model,year,category,transmission,passenger_capacity,daily_price)
