@@ -3,7 +3,7 @@ import { ArrowRight, Car } from "lucide-react";
 
 import { DateSearch } from "@/components/site/date-search";
 
-import hero from "@/assets/renault-rumbo-a-los-andes.png.asset.json";
+import hero from "/public/suvrenaulthero.png";
 import roca from "@/assets/roca.jpg";
 import neuquen from "@/assets/neuquen.jpg";
 
