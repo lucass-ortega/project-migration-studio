@@ -3,7 +3,7 @@ import { ArrowRight, Car } from "lucide-react";
 
 import { DateSearch } from "@/components/site/date-search";
 
-import hero from "/public/suvrenaulthero.png";
+
 import roca from "@/assets/roca.jpg";
 import neuquen from "@/assets/neuquen.jpg";
 
@@ -27,7 +27,15 @@ function Index() {
   return (
     <>
       <section className="relative">
-        <img src={hero.url} alt="Renault azul rumbo a los Andes" width={1774} height={887} className="h-[480px] w-full object-cover" />
+        <img
+          src="/renault-rumbo-a-los-andes.jpg"
+          alt="Renault azul rumbo a los Andes"
+          width={1774}
+          height={887}
+          fetchPriority="high"
+          decoding="async"
+          className="h-[480px] w-full object-cover"
+        />
         <div className="absolute inset-0 bg-gradient-to-r from-navy/85 via-navy/40 to-transparent" />
         <div className="absolute inset-0 mx-auto max-w-7xl px-6 pt-14 text-primary-foreground">
           <p className="text-sm tracking-[0.25em]">GENERAL ROCA · ALTO VALLE · PATAGONIA</p>
