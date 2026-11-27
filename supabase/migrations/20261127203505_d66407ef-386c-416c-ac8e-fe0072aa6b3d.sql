@@ -1,0 +1,4 @@
+ALTER POLICY "Administrators read blocks" ON public.vehicle_blocks USING ((SELECT public.has_role((SELECT auth.uid()),'admin')));
+ALTER POLICY "Administrators create blocks" ON public.vehicle_blocks WITH CHECK ((SELECT public.has_role((SELECT auth.uid()),'admin')) AND created_by=(SELECT auth.uid()));
+ALTER POLICY "Administrators edit blocks" ON public.vehicle_blocks USING ((SELECT public.has_role((SELECT auth.uid()),'admin'))) WITH CHECK ((SELECT public.has_role((SELECT auth.uid()),'admin')));
+ALTER POLICY "Administrators delete blocks" ON public.vehicle_blocks USING ((SELECT public.has_role((SELECT auth.uid()),'admin')));
