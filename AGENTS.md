@@ -36,3 +36,4 @@ use the editor.
 - Public availability requests use a bounded server function returning only vehicle IDs and occupied periods; the privileged RPC stays inaccessible to browser roles to avoid exposing private reservation details.
 - Reservation submission uses a service-only transactional RPC with an idempotency lock and immutable customer/price snapshots, so retries cannot rewrite customer history or duplicate requests.
 - Public catalog reads use a sessionless publishable client; privileged image signing accepts only vehicle-scoped stored paths to avoid exposing unrelated files.
+- Transfer the per-request public Query cache during SSR hydration so signed image URLs stay identical on the first browser render.
