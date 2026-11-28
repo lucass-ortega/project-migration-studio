@@ -139,6 +139,13 @@ function VehiclesPage() {
                   ))}
                 </div>
 
+                <div className="mt-4">
+                  <p className="text-sm font-bold text-foreground">Kilometraje ilimitado</p>
+                  {v.guarantee_amount != null && (
+                    <p className="text-sm text-muted-foreground">Garantía: {formatMoney(v.guarantee_amount)}</p>
+                  )}
+                </div>
+
                 <div className="mt-5 grid gap-2 text-sm sm:grid-cols-2">
                   <span className="flex items-center gap-2">
                     <Check className="h-4 w-4 shrink-0 text-primary" />

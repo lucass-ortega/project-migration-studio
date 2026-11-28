@@ -25,6 +25,7 @@ export type PublicVehicle = {
   features: string[];
   images: string[];
   daily_price: number | null;
+  guarantee_amount: number | null;
 };
 export type PublicSettings = { whatsapp_number: string | null; deposit_type: string | null; deposit_value: number | null };
 
@@ -34,7 +35,7 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async () => 
   const [v, s] = await Promise.all([
     sb
       .from("vehicles")
-      .select("id,brand,model,year,category,transmission,fuel_type,passenger_capacity,luggage_capacity,description,features,images,daily_price")
+      .select("id,brand,model,year,category,transmission,fuel_type,passenger_capacity,luggage_capacity,description,features,images,daily_price,guarantee_amount")
       .eq("is_active", true)
       .order("sort_order"),
     sb.from("public_business_settings").select("whatsapp_number,deposit_type,deposit_value").maybeSingle(),
@@ -42,7 +43,7 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async () => 
   if (v.error) throw new Error("No se pudieron cargar los vehículos.");
   if (s.error) throw new Error("No se pudo cargar la configuración.");
   const { resolveVehicleImages } = await import("./vehicle-images.server");
-  const vehicles: PublicVehicle[] = await Promise.all((v.data ?? []).map(async (r) => ({ ...r, images: await resolveVehicleImages(r.id, r.images), daily_price: r.daily_price == null ? null : Number(r.daily_price) })));
+  const vehicles: PublicVehicle[] = await Promise.all((v.data ?? []).map(async (r) => ({ ...r, images: await resolveVehicleImages(r.id, r.images), daily_price: r.daily_price == null ? null : Number(r.daily_price), guarantee_amount: r.guarantee_amount == null ? null : Number(r.guarantee_amount) })));
   const settings: PublicSettings = {
     whatsapp_number: s.data?.whatsapp_number ?? null,
     deposit_type: s.data?.deposit_type ?? null,

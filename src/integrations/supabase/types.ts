@@ -310,6 +310,7 @@ export type Database = {
           description: string | null
           features: string[]
           fuel_type: string | null
+          guarantee_amount: number | null
           id: string
           images: string[]
           is_active: boolean
@@ -329,6 +330,7 @@ export type Database = {
           description?: string | null
           features?: string[]
           fuel_type?: string | null
+          guarantee_amount?: number | null
           id?: string
           images?: string[]
           is_active?: boolean
@@ -348,6 +350,7 @@ export type Database = {
           description?: string | null
           features?: string[]
           fuel_type?: string | null
+          guarantee_amount?: number | null
           id?: string
           images?: string[]
           is_active?: boolean
